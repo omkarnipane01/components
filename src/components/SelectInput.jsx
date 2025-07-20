@@ -25,10 +25,11 @@ const SelectInput = ({
           {label}
         </label>
       )}
-      <div className="flex gap-2 flex items-center">
+      <div className="flex gap-2 flex items-center ">
         <input
           className={`relative flex border border-gray-300 w-full text-black rounded  px-4 py-2 ${className} `}
           value={value}
+          name={name}
           onChange={onChange}
           type="text"
           placeholder={placeholder}
@@ -40,7 +41,7 @@ const SelectInput = ({
         {value && (
           <X
             size={16}
-            className="absolute right-8  text-gray-500 cursor-pointer hover:text-red-500"
+            className="absolute right-5 text-gray-500 cursor-pointer hover:text-red-500"
             onClick={() => onChange("")}
           />
         )}
