@@ -136,6 +136,7 @@ function App() {
                       </a>
                     ),
                   },
+
                 ]}
                 action={{ edit: editData, delete: deleteData, view: viewData }}
                 is_search={true}

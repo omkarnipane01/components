@@ -6,7 +6,7 @@ const TableCard = ({
   data = [],
   rows,
   // action = { edit: false, delete: false },
-  action = { },
+  action = {},
 
   showVertical,
 }) => {
