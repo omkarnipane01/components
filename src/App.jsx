@@ -11,6 +11,8 @@ import DataTable from "./components/DataTable";
 import SelectInput from "./components/SelectInput";
 import TextInput from "./components/TextInput";
 import Button from "./components/Button";
+import MultiSelectInput from "./components/MultiSelectInput";
+import MultiSelectCheck from "./components/MultiSelectCheck";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -47,7 +49,9 @@ function App() {
   };
 
   const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
+  // console.log(selectedUsers);
   const users = [
     { value: "user1", label: "User 1" },
     { value: "user2", label: "User 2" },
@@ -70,10 +74,27 @@ function App() {
     }));
   };
 
+  const options = [
+    { key: "company_name", label: "Company Name" },
+    { key: "service", label: "Service" },
+    { key: "platform", label: "Platform" },
+    { key: "approval", label: "Approval Status" },
+    { key: "payment_type", label: "Payment Type" },
+    { key: "total", label: "Total Amount" },
+    { key: "pending", label: "Amount Pending" },
+    { key: "status", label: "Payment Status" },
+    { key: "created", label: "Created At" },
+    { key: "action", label: "Action" },
+  ];
+
+  const [selected, setSelected] = useState(["company_name", "platform"]);
+
   return (
     <>
       <div className="grid grid-cols-6 gap-2">
-        <div className={` col-span-1 bg-white border-white rounded-lg px-2 py-2 shadow-md flex gap-3`}>
+        <div
+          className={` col-span-1 bg-white border-white rounded-lg px-2 py-2 shadow-md flex gap-3`}
+        >
           <div> sidebar</div>
           <div className="justify justify-left">
             <PanelLeft
@@ -84,10 +105,11 @@ function App() {
             />
           </div>
         </div>
-        <div className={`col-span-5 bg-white border-white rounded-lg px-2 py-2 shadow`}>
-      {/* <div className={`${filters.length > 0 && showFilter ? "col-span-4" : "col-span-5"}`}> */}
-      {/* <div className={`${showSidebar ? "col-span-5" : "col-span-6"} bg-white border-white rounded-lg px-2 py-2 shadow`}> */}
-
+        <div
+          className={`col-span-5 bg-white border-white rounded-lg px-2 py-2 shadow`}
+        >
+          {/* <div className={`${filters.length > 0 && showFilter ? "col-span-4" : "col-span-5"}`}> */}
+          {/* <div className={`${showSidebar ? "col-span-5" : "col-span-6"} bg-white border-white rounded-lg px-2 py-2 shadow`}> */}
 
           <div>
             <div className="px-1 py-2 ">
@@ -155,7 +177,6 @@ function App() {
           keys={{ valuekey: "id", titlekey: "name" }}
           showIcon={true}
         />
-
         <SearchSelect
           value={searchFilterVals.sf2}
           name="sf2"
@@ -178,7 +199,6 @@ function App() {
           keys={{ valuekey: "id", titlekey: "name" }}
           showIcon={true}
         />
-
         <SelectInput
           label="Filter by User"
           options={users}
@@ -188,6 +208,26 @@ function App() {
           placeholder="Choose Value"
           keys={{ valuekey: "value", titlekey: "label" }}
           className="h-10"
+        />
+        {/* <MultiSelectInput
+          label="Select Multiple users"
+          options={users}
+          name="multi_user"
+          value={selectedUsers}
+          onChange={setSelectedUsers}
+          placeholder="Choose Value"
+          keys={{ valuekey: "value", titlekey: "label" }}
+          className="h-10"
+        /> */}
+        <MultiSelectCheck
+          name="TestColumns"
+          label="Test Columns"
+          options={options}
+          selected={selected}
+          onChange={setSelected}
+          keys={{ valuekey: "key", titlekey: "label" }}
+          Fname="Columns"
+          // className={"px-2 py-4"}
         />
       </div>
       <div>
@@ -217,7 +257,7 @@ function App() {
       </div>
       <div>
         <div className="px-2 py-2 ">
-          <DataTable
+          {/* <DataTable
             columns={columns}
             data={empData}
             users={users}
@@ -266,7 +306,7 @@ function App() {
                 type: "SelectInput",
               },
             ]}
-          />
+          /> */}
         </div>
       </div>
     </>

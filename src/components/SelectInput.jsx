@@ -1,4 +1,4 @@
-import { CloudCog, X } from "lucide-react";
+import { ChevronDown, CloudCog, X } from "lucide-react";
 import React, { use, useState } from "react";
 
 const SelectInput = ({
@@ -16,7 +16,7 @@ const SelectInput = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className={`relative space-y-1 px-2 py-2  h-full`}>
+    <div className={`relative space-y-1 px-2 py-2 h-full`}>
       {label && (
         <label
           htmlFor={name}
@@ -25,7 +25,7 @@ const SelectInput = ({
           {label}
         </label>
       )}
-      <div className="flex gap-2 flex items-center ">
+      <div className="flex gap-2 flex items-center group">
         <input
           className={`relative flex border border-gray-300 w-full text-black rounded  px-4 py-2 ${className} `}
           value={value}
@@ -38,12 +38,17 @@ const SelectInput = ({
           readOnly
           {...rest}
         />
-        {value && (
+        {value ? (
           <X
             size={16}
             className="absolute right-5 text-gray-500 cursor-pointer hover:text-red-500"
             onClick={() => onChange("")}
           />
+        ) : (
+            <ChevronDown
+              size={18}
+              className="absolute right-5 text-gray-500 group-hover:text-blue-500"
+            />
         )}
       </div>
 

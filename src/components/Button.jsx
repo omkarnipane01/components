@@ -16,6 +16,7 @@ const Button = ({
     danger: "bg-red-500 text-white hover:bg-red-600",
     success: "bg-green-500 text-white hover:bg-green-600",
     info: "bg-cyan-500 text-white hover:bg-cyan-600", // added 'info' variant
+    none:"bg-white-500 text-red-400 border border-gray-300"
   };
 
   return (
