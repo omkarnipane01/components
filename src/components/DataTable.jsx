@@ -1,34 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TableCard from "./TableCard";
 import SelectInput from "./SelectInput";
 import SearchSelect from "./SearchSelect";
 import TextInput from "./TextInput";
 import Button from "./Button";
-import { PanelLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, PanelLeft } from "lucide-react";
 import MultiSelectCheck from "./MultiSelectCheck";
 
 const DataTable = ({
   columns,
   data = [],
   rows,
-  // action = { edit: false, delete: false },
   action = {},
-
   is_search = true,
   searchData = "",
   showVertical = false,
   filters = [],
+  totalRecords = 0,
 }) => {
+  const defaultSearch = "";
+  const defaultPage = 10;
+  const totalCount = totalRecords;
+
   const [selectedValue, setSelectedValue] = useState(null);
-  const [searchText, setSearchText] = useState("");
-  const [page, setPage] = useState("10");
+  const [searchText, setSearchText] = useState(defaultSearch);
+  const [page, setPage] = useState(defaultPage); //page size
   const [showFilter, setShowFilter] = useState(false);
+  const [tableData, setTableData] = useState(data.slice(0, page));
+  const [currentPage, setCurrentPage] = useState(1); // Starts from page 1
+  const totalPages = Math.ceil(totalCount / page);
+  // console.log("totalPages ", totalPages);
+
   const handleChange = (name, value) => {
     setFilterVals((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+
   const getInitialFilters = () => {
     let initial = {};
     filters.forEach((filter) => {
@@ -37,8 +46,9 @@ const DataTable = ({
     return initial;
   };
   const [filterVals, setFilterVals] = useState(getInitialFilters());
-  // const columns_data = [...columns, { key: "action", label: "Action" }];
+
   let columns_data = columns;
+
   if (Object.keys(action).length > 0) {
     columns_data = [...columns, { key: "action", label: "Action" }];
   }
@@ -46,6 +56,23 @@ const DataTable = ({
     columns_data.map((item) => item.key)
   );
 
+  const handleReset = () => {
+    setSearchText(defaultSearch);
+    setPage(defaultPage);
+    setSelected(columns_data.map((item) => item.key));
+    setTableData(data.slice(0, page));
+    searchData("");
+    setCurrentPage(1);
+  };
+
+  // useEffect for showing records based on
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * page;
+    const endIndex = startIndex + page;
+    setTableData(data.slice(startIndex, endIndex));
+  }, [page, data, currentPage]);
+
+  // get this pages from utils.js later
   const pages = [
     { key: 10, label: 10 },
     { key: 25, label: 25 },
@@ -60,7 +87,7 @@ const DataTable = ({
         }`}
       >
         <div className="border border-gray-300 bg-white rounded-xl h-auto px-3 py-3 shadow-sm flex flex-col gap-4 md:flex-row md:items-center md:justify-between sm:h-12">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="flex items-center">
             <PanelLeft
               className="cursor-pointer text-gray-500"
               onClick={() => {
@@ -75,7 +102,9 @@ const DataTable = ({
                 onChange={(e) => {
                   setSearchText(e.target.value);
                   {
-                    e.target.value.length > 3 && searchData(e.target.value);
+                    e.target.value.length > 2
+                      ? setTableData(searchData(e.target.value, "name"))
+                      : setTableData(data.slice(0, page));
                   }
                 }}
                 placeholder="🔍 search"
@@ -83,8 +112,9 @@ const DataTable = ({
               />
             )}
           </div>
+          {/* info div */}
 
-          <div className="info-div flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="flex items-center gap-1">
             <SelectInput
               options={pages}
               name="Pagination"
@@ -105,7 +135,12 @@ const DataTable = ({
               Fname="Columns"
               className="h-12  w-full md:w-38"
             />
-            <Button type="button" className="w-full  md:w-auto" variant="none">
+            <Button
+              type="button"
+              className="w-full  md:w-auto"
+              variant="none"
+              onClick={handleReset}
+            >
               Reset
             </Button>
           </div>
@@ -115,14 +150,36 @@ const DataTable = ({
           <TableCard
             // columns={columns}
             columns={columns_data.filter((col) => selected.includes(col.key))}
-            data={data}
+            data={tableData}
             rows={rows}
             action={action}
             showVertical={showVertical}
           />
         </div>
-        <div className="px-2 ">
-          <div className="text-right">showing 10 of 10</div>
+        <div className="px-2 flex item-center justify-between">
+          <div className="bg-gray-100 shadow-sm border-white rounded-sm px-1 py-1">
+            showing {page} Records Per Page
+          </div>
+          <div className="px-2 gap-4 flex item-center">
+            <div className="bg-gray-100 shadow-sm border-white rounded-sm px-2 py-1">
+              From {(currentPage - 1) * page + 1} To{" "}
+              {Math.min(currentPage * page, totalCount)}
+            </div>
+            <div className="flex item-center  text-blue-400  cursor-pointer ">
+              <ChevronLeft
+                size={28}
+                onClick={() => {
+                  setCurrentPage((prev) => Math.max(prev - 1, 1));
+                }}
+              />
+              <ChevronRight
+                size={28}
+                onClick={() => {
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
       {filters.length > 0 && showFilter && (
@@ -139,7 +196,6 @@ const DataTable = ({
                       <SearchSelect
                         key={index}
                         value={filterVals[filter.name]}
-                        // onSelect={filter.onSelect}
                         onSelect={(val) => {
                           handleChange(filter.name, val);
                           filter.onSelect?.(val);
@@ -157,9 +213,7 @@ const DataTable = ({
                         key={index}
                         options={filter.options}
                         name={filter.name}
-                        // value={filter.value}
                         value={filterVals[filter.name]}
-                        // onChange={filter.onChange}
                         onChange={(e) => {
                           handleChange(filter.name, e);
                           filter.onChange;
@@ -171,7 +225,6 @@ const DataTable = ({
                     );
                   }
                 })}
-                {/* <div className="flex gap-2 border-t px-2 py-2 bg-white rounded-md border border-gray-300  shadow-lg"> */}
                 <div className="justify justify-between flex px-2">
                   <Button type="button" className="w-full md:w-auto">
                     Apply Filter

@@ -1,27 +1,16 @@
 import React from "react";
 import TableCell from "./TableCell";
 
-const TableCard = ({
-  columns,
-  data = [],
-  rows,
-  // action = { edit: false, delete: false },
-  action = {},
-
-  showVertical,
-}) => {
+const TableCard = ({ columns, data = [], rows, action, showVertical }) => {
   const showActions = action?.edit || action?.delete || action?.view;
-  console.log("showActions ",showActions);
-  console.log("TableCard columns ",columns);
 
   return (
-    // <div className="h-screen overflow-y-auto overflow-x-auto rounded-lg shadow-sm">
-    <div className="h-screen overflow-y-auto overflow-x-auto rounded-lg shadow-sm ">
+    // removed h-screen and added h-fit 
+    <div className="h-fit max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh] overflow-y-auto overflow-y-auto overflow-x-auto rounded-lg shadow-sm ">
       <table className="table-auto min-w-full text-sm text-center ">
         <thead className="sticky top-0 z-50 bg-blue-100 shadow ">
           <tr>
             {columns.map((col) => (
-              // thPartian here
               <th
                 key={col.key}
                 className=" border-gray-300 text-center px-4 py-3 text-sm font-medium text-gray-700 border-l border-r"
@@ -29,11 +18,6 @@ const TableCard = ({
                 {col.label}
               </th>
             ))}
-            {/* {showActions && (
-              <th className="border-white px-4 py-3 text-sm font-medium text-gray-700 border-l border-r">
-                Action
-              </th>
-            )} */}
           </tr>
         </thead>
         <tbody>
