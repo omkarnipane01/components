@@ -5,7 +5,13 @@ import "./index.css";
 import SearchSelect from "./components/SearchSelect";
 // import empData from "../assets/emp.json";
 import empData from "./assets/emp.json";
-import { ChartNoAxesGantt, PanelLeft, Table2Icon } from "lucide-react";
+import {
+  ChartNoAxesGantt,
+  IndianRupee,
+  Loader2,
+  PanelLeft,
+  Table2Icon,
+} from "lucide-react";
 import TableCard from "./components/TableCard";
 import DataTable from "./components/DataTable";
 import SelectInput from "./components/SelectInput";
@@ -13,17 +19,16 @@ import TextInput from "./components/TextInput";
 import Button from "./components/Button";
 import MultiSelectInput from "./components/MultiSelectInput";
 import MultiSelectCheck from "./components/MultiSelectCheck";
-// import { getActionCell } from "./utils/getActionCell";
 
 function App() {
   const [count, setCount] = useState(0);
+  // !while pass key to columns pass database column field name here
   const columns = [
     { key: "id", label: "Id" },
     { key: "name", label: "Name" },
     { key: "salary", label: "Salary" },
     { key: "designation", label: "Designation" },
     { key: "profile", label: "Profile" },
-    // { key: "action", label: "Action" },
   ];
   // extract columns and data row from the data and pass to the component it would me more better and dynamic to edit the row data
 
@@ -41,18 +46,42 @@ function App() {
     console.log(data);
   };
 
-  const searchData = (data,titlekey) => {
+  const sortData = (sort, key) => {
+    const sorted = [...data].sort((a, b) => {
+      const valA = a[key];
+      const valB = b[key];
+
+      if (typeof valA === "string") {
+        return sort === "desc"
+          ? valB.localeCompare(valA)
+          : valA.localeCompare(valB);
+      } else {
+        return sort === "desc" ? valB - valA : valA - valB;
+      }
+    });
+    setData(sorted);
+  };
+  const filterTable = (filters = []) => {
+    console.log("filters ", filters);
+    console.log("Apply filter");
+  };
+  const [data, setData] = useState(empData);
+
+  const searchData = (data, titlekey) => {
     console.log("search-data");
     console.log(data);
-     const filtered = empData?.filter(
-      (item) => item?.[titlekey]?.toLowerCase() === data.toLowerCase()
+    // const filtered = empData?.filter(
+    //   (item) => item?.[titlekey]?.toLowerCase() === data.toLowerCase()
+    // );
+    const filtered = empData.filter((item) =>
+      item?.[titlekey]?.toLowerCase().includes(data.toLowerCase())
     );
-    return filtered
+    return filtered;
   };
 
-
-  const filterFunction = (selectedItem) => {
+  const filterFunction2 = (selectedItem, itemData) => {
     console.log("User selected:", selectedItem);
+    console.log("itemData ", itemData);
   };
 
   const [selectedUser, setSelectedUser] = useState("");
@@ -60,10 +89,10 @@ function App() {
 
   // console.log(selectedUsers);
   const users = [
-    { value: "user1", label: "User 1" },
-    { value: "user2", label: "User 2" },
-    { value: "user3", label: "User 3" },
-    { value: "user4", label: "User 4" },
+    { value: "1", label: "User 1" },
+    { value: "2", label: "User 2" },
+    { value: "3", label: "User 3" },
+    { value: "4", label: "User 4" },
   ];
 
   const [searchFilterVals, setSearchFilterVals] = useState({
@@ -96,7 +125,7 @@ function App() {
     { key: "action", label: "Action" },
   ];
 
-  const [selected, setSelected] = useState(["company_name", "platform"]);
+  // const [selected, setSelected] = useState(["company_name", "platform"]);
 
   return (
     <>
@@ -119,22 +148,25 @@ function App() {
         >
           {/* <div className={`${filters.length > 0 && showFilter ? "col-span-4" : "col-span-5"}`}> */}
           {/* <div className={`${showSidebar ? "col-span-5" : "col-span-6"} bg-white border-white rounded-lg px-2 py-2 shadow`}> */}
-
           <div>
             <div className="px-1 py-2 ">
               <DataTable
                 columns={columns}
-                data={empData}
+                data={data}
                 users={users}
-                setSelectedUser
                 keys={{ valuekey: "value", titlekey: "label" }}
                 rows={{
                   id: (row) => row.id,
                   name: (row) => row.name,
-                  salary: (row) => <b>₹ {row.salary}</b>,
+                  salary: (row) => (
+                    <span className="flex items-center gap-1">
+                      <IndianRupee size={14} />
+                      {row.salary}
+                    </span>
+                  ),
                   designation: (row) => row.designation,
                   profile: (row) => (
-                    <a href={row.profile} target="_blank" rel="noreferrer">
+                    <a href={row.profile} target="_blank" rel="">
                       {row.profile}
                     </a>
                   ),
@@ -148,16 +180,20 @@ function App() {
                 is_search={true}
                 searchData={searchData}
                 showVertical={false}
-                totalRecords ={empData.length} 
+                totalRecords={empData.length}
+                sort={true}
+                sortFunction={sortData}
+                filterFunction={filterTable}
                 filters={[
                   {
-                    onSelect: filterFunction,
+                    // onSelect: filterFunction2,
                     data: empData,
                     keys: { valuekey: "id", titlekey: "name" },
                     className: "h-8 w-full md:w-full",
                     placeholder: "Search Filter",
                     type: "SearchSelect",
                     name: "search_filter",
+                    filterSearchFunction: searchData,
                   },
                   {
                     options: users,
@@ -247,8 +283,7 @@ function App() {
             // className={"px-2 py-4"}
           /> */}
         </div>
-        {/* <SearchSelect
-          value={searchFilterVals.sf1}
+        <SearchSelect
           name="sf1"
           onSelect={(val, dataMap) => {
             handleChange("sf1", val);
@@ -257,9 +292,9 @@ function App() {
           data={empData}
           keys={{ valuekey: "id", titlekey: "name" }}
           showIcon={true}
+          searchFunction={searchData}
         />
         <SearchSelect
-          value={searchFilterVals.sf2}
           name="sf2"
           onSelect={(val, dataMap) => {
             handleChange("sf2", val);
@@ -268,9 +303,9 @@ function App() {
           data={empData}
           keys={{ valuekey: "id", titlekey: "name" }}
           showIcon={true}
+          searchFunction={searchData}
         />
         <SearchSelect
-          value={searchFilterVals.sf3}
           name="sf3"
           onSelect={(val, dataMap) => {
             handleChange("sf3", val);
@@ -279,6 +314,7 @@ function App() {
           data={empData}
           keys={{ valuekey: "id", titlekey: "name" }}
           showIcon={true}
+          searchFunction={searchData}
         />
         <SelectInput
           label="Filter by User"
@@ -289,7 +325,7 @@ function App() {
           placeholder="Choose Value"
           keys={{ valuekey: "value", titlekey: "label" }}
           className="h-10"
-        /> */}
+        />
         {/* <MultiSelectInput
           label="Select Multiple users"
           options={users}

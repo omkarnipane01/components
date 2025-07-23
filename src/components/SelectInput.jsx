@@ -28,7 +28,10 @@ const SelectInput = ({
       <div className="flex gap-2 flex items-center group">
         <input
           className={`relative flex border border-gray-300 w-full text-black rounded  px-4 py-2 ${className} `}
-          value={value}
+         
+          value={
+            options.find((item) => item[valuekey] === value)?.[titlekey] || ""
+          }
           name={name}
           onChange={onChange}
           type="text"
@@ -45,10 +48,10 @@ const SelectInput = ({
             onClick={() => onChange("")}
           />
         ) : (
-            <ChevronDown
-              size={18}
-              className="absolute right-5 text-gray-500 group-hover:text-blue-500"
-            />
+          <ChevronDown
+            size={18}
+            className="absolute right-5 text-gray-500 group-hover:text-blue-500"
+          />
         )}
       </div>
 
@@ -60,7 +63,7 @@ const SelectInput = ({
                 key={item?.[valuekey]}
                 className="px-4 py-2 w-full rounded-sm bg-white hover:bg-blue-100 cursor-pointer"
                 onClick={() => {
-                  onChange(item?.[titlekey]);
+                  onChange(item?.[valuekey]);
                 }}
               >
                 {item?.[titlekey]}

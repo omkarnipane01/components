@@ -6,6 +6,7 @@ import TextInput from "./TextInput";
 import Button from "./Button";
 import { ChevronLeft, ChevronRight, PanelLeft } from "lucide-react";
 import MultiSelectCheck from "./MultiSelectCheck";
+import { pages } from "../utils/utils";
 
 const DataTable = ({
   columns,
@@ -17,19 +18,20 @@ const DataTable = ({
   showVertical = false,
   filters = [],
   totalRecords = 0,
+  sort,
+  sortFunction,
+  filterFunction,
 }) => {
   const defaultSearch = "";
   const defaultPage = 10;
   const totalCount = totalRecords;
 
-  const [selectedValue, setSelectedValue] = useState(null);
   const [searchText, setSearchText] = useState(defaultSearch);
   const [page, setPage] = useState(defaultPage); //page size
   const [showFilter, setShowFilter] = useState(false);
   const [tableData, setTableData] = useState(data.slice(0, page));
   const [currentPage, setCurrentPage] = useState(1); // Starts from page 1
   const totalPages = Math.ceil(totalCount / page);
-  // console.log("totalPages ", totalPages);
 
   const handleChange = (name, value) => {
     setFilterVals((prev) => ({
@@ -38,11 +40,13 @@ const DataTable = ({
     }));
   };
 
+  console.log("filters ", filters);
   const getInitialFilters = () => {
     let initial = {};
     filters.forEach((filter) => {
       initial[filter.name] = "";
     });
+    console.log(initial);
     return initial;
   };
   const [filterVals, setFilterVals] = useState(getInitialFilters());
@@ -52,8 +56,9 @@ const DataTable = ({
   if (Object.keys(action).length > 0) {
     columns_data = [...columns, { key: "action", label: "Action" }];
   }
+
   const [selected, setSelected] = useState(
-    columns_data.map((item) => item.key)
+    localStorage.getItem("user_columns").split(",")
   );
 
   const handleReset = () => {
@@ -70,15 +75,18 @@ const DataTable = ({
     const startIndex = (currentPage - 1) * page;
     const endIndex = startIndex + page;
     setTableData(data.slice(startIndex, endIndex));
-  }, [page, data, currentPage]);
+    localStorage.setItem("user_columns", selected);
+  }, [page, data, currentPage, selected]);
 
-  // get this pages from utils.js later
-  const pages = [
-    { key: 10, label: 10 },
-    { key: 25, label: 25 },
-    { key: 50, label: 50 },
-    { key: 100, label: 100 },
-  ];
+  useEffect(() => {
+    const storedColumns = localStorage.getItem("user_columns");
+    if (storedColumns) {
+      setSelected(storedColumns.split(","));
+    } else {
+      setSelected(columns_data.map((item) => item.key));
+    }
+  }, []);
+
   return (
     <div className="px-2 py-4 grid grid-cols-5 gap-4">
       <div
@@ -154,15 +162,15 @@ const DataTable = ({
             rows={rows}
             action={action}
             showVertical={showVertical}
+            sort={sort}
+            sortFunction={sortFunction}
           />
         </div>
-        <div className="px-2 flex item-center justify-between">
-          <div className="bg-gray-100 shadow-sm border-white rounded-sm px-1 py-1">
-            showing {page} Records Per Page
-          </div>
+        <div className="sticky px-2 py-2 flex item-center justify-between border border-gray-300 bg-white shadow-sm rounded-md">
+          <div className="px-1 py-1">showing {page} Records Per Page</div>
           <div className="px-2 gap-4 flex item-center">
             <div className="bg-gray-100 shadow-sm border-white rounded-sm px-2 py-1">
-              From {(currentPage - 1) * page + 1} To{" "}
+              {(currentPage - 1) * page + 1} -{" "}
               {Math.min(currentPage * page, totalCount)}
             </div>
             <div className="flex item-center  text-blue-400  cursor-pointer ">
@@ -195,15 +203,19 @@ const DataTable = ({
                     return (
                       <SearchSelect
                         key={index}
-                        value={filterVals[filter.name]}
-                        onSelect={(val) => {
-                          handleChange(filter.name, val);
-                          filter.onSelect?.(val);
+                        value={filterVals[filter.name]?.label || ""}
+                        onSelect={(id, item) => {
+                          handleChange(filter.name, {
+                            id: item?.[filter.keys.valuekey],
+                            label: item?.[filter.keys.titlekey],
+                          });
+                          filter.onSelect?.(id, item); // Send ID to backend
                         }}
                         data={filter.data}
                         keys={filter.keys}
                         className={filter.className}
                         placeholder={filter.placeholder}
+                        searchFunction={filter.filterSearchFunction}
                       />
                     );
                   }
@@ -212,7 +224,6 @@ const DataTable = ({
                       <SelectInput
                         key={index}
                         options={filter.options}
-                        name={filter.name}
                         value={filterVals[filter.name]}
                         onChange={(e) => {
                           handleChange(filter.name, e);
@@ -226,7 +237,11 @@ const DataTable = ({
                   }
                 })}
                 <div className="justify justify-between flex px-2">
-                  <Button type="button" className="w-full md:w-auto">
+                  <Button
+                    type="button"
+                    className="w-full md:w-auto"
+                    onClick={() => filterFunction(filterVals)}
+                  >
                     Apply Filter
                   </Button>
                   <Button
