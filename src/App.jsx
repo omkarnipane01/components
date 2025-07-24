@@ -19,6 +19,7 @@ import TextInput from "./components/TextInput";
 import Button from "./components/Button";
 import MultiSelectInput from "./components/MultiSelectInput";
 import MultiSelectCheck from "./components/MultiSelectCheck";
+import Sheet from "./components/Sheet";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -87,7 +88,6 @@ function App() {
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
 
-  // console.log(selectedUsers);
   const users = [
     { value: "1", label: "User 1" },
     { value: "2", label: "User 2" },
@@ -102,6 +102,9 @@ function App() {
   });
 
   const [showSidebar, setShowSidebar] = useState(true);
+  console.log("showSidebar ", showSidebar);
+
+  // const [showSheet, setSheet] = useState(false);
 
   const handleChange = (name, val) => {
     setSearchFilterVals((prev) => ({
@@ -125,227 +128,99 @@ function App() {
     { key: "action", label: "Action" },
   ];
 
-  // const [selected, setSelected] = useState(["company_name", "platform"]);
-
   return (
     <>
-      <div className="grid grid-cols-6 gap-2 h-full max-h-[80vh] md:max-h-[70vh] lg:max-h-[80vh]">
+      <div className="flex gap-2 h-screen w-full">
+        {/* sidebar start */}
         <div
-          className={` col-span-1 bg-white border-white rounded-lg px-2 py-2 shadow-md flex gap-3`}
+          className={`fixed h-screen  ${
+            showSidebar ? "w-[250px]" : "w-[50px] "
+          }  z-100 bg-white border-red-500 border rounded-md px-2 py-2 shadow-md flex gap-3`}
         >
-          <div> sidebar</div>
-          <div className="justify justify-left">
-            <PanelLeft
-              className="cursor-pointer text-gray-500"
-              onClick={() => {
-                setShowSidebar((prev) => !prev);
+          <div className="flex flex-1 justify-between justify">
+            <div>{showSidebar && "sidebar"}</div>
+            <div className="justify justify-left">
+              <PanelLeft
+                className="cursor-pointer text-gray-500"
+                onClick={() => {
+                  setShowSidebar((prev) => !prev);
+                }}
+              />
+            </div>
+            {/* <Sheet change={showSheet} onchange={setSheet}/> */}
+          </div>
+        </div>
+        {/* sidebar ends */}
+        {/* content start */}
+        
+        <div
+          className={`${showSidebar?'ml-[250px]':'ml-[50px]'} bg-white border-red-500 border rounded-lg px-2 py-2 shadow`}
+        >
+          <div className="px-1 py-2 ">
+            <DataTable
+              columns={columns}
+              data={data}
+              users={users}
+              keys={{ valuekey: "value", titlekey: "label" }}
+              rows={{
+                id: (row) => row.id,
+                name: (row) => row.name,
+                salary: (row) => (
+                  <span className="flex items-center gap-1">
+                    <IndianRupee size={14} />
+                    {row.salary}
+                  </span>
+                ),
+                designation: (row) => row.designation,
+                profile: (row) => (
+                  <a
+                    href={row.profile}
+                    className="break-words"
+                    target="_blank"
+                    rel=""
+                  >
+                    {row.profile}
+                  </a>
+                ),
               }}
+              action={{
+                ...(hasAccess && { edit: editData }),
+                // ...(hasNotAccess && { delete: deleteData }),
+                ...(hasAccess && { delete: deleteData }),
+                ...(hasAccess && { view: viewData }),
+              }}
+              is_search={true}
+              searchData={searchData}
+              showVertical={true}
+              totalRecords={empData.length}
+              sort={true}
+              sortFunction={sortData}
+              filterFunction={filterTable}
+              filters={[
+                {
+                  data: empData,
+                  keys: { valuekey: "id", titlekey: "name" },
+                  className: "h-8 w-full md:w-full",
+                  placeholder: "Search Filter",
+                  type: "SearchSelect",
+                  name: "search_filter",
+                  filterSearchFunction: searchData,
+                },
+                {
+                  options: users,
+                  name: "user_filter",
+                  value: selectedUser,
+                  onChange: setSelectedUser,
+                  placeholder: "Choose Value",
+                  keys: { valuekey: "value", titlekey: "label" },
+                  className: "h-8 w-full md:w-full",
+                  type: "SelectInput",
+                },
+              ]}
             />
           </div>
         </div>
-        <div
-          className={`col-span-5 bg-white border-white rounded-lg px-2 py-2 shadow`}
-        >
-          {/* <div className={`${filters.length > 0 && showFilter ? "col-span-4" : "col-span-5"}`}> */}
-          {/* <div className={`${showSidebar ? "col-span-5" : "col-span-6"} bg-white border-white rounded-lg px-2 py-2 shadow`}> */}
-          <div>
-            <div className="px-1 py-2 ">
-              <DataTable
-                columns={columns}
-                data={data}
-                users={users}
-                keys={{ valuekey: "value", titlekey: "label" }}
-                rows={{
-                  id: (row) => row.id,
-                  name: (row) => row.name,
-                  salary: (row) => (
-                    <span className="flex items-center gap-1">
-                      <IndianRupee size={14} />
-                      {row.salary}
-                    </span>
-                  ),
-                  designation: (row) => row.designation,
-                  profile: (row) => (
-                    <a href={row.profile} target="_blank" rel="">
-                      {row.profile}
-                    </a>
-                  ),
-                }}
-                action={{
-                  ...(hasAccess && { edit: editData }),
-                  // ...(hasNotAccess && { delete: deleteData }),
-                  ...(hasAccess && { delete: deleteData }),
-                  ...(hasAccess && { view: viewData }),
-                }}
-                is_search={true}
-                searchData={searchData}
-                showVertical={false}
-                totalRecords={empData.length}
-                sort={true}
-                sortFunction={sortData}
-                filterFunction={filterTable}
-                filters={[
-                  {
-                    // onSelect: filterFunction2,
-                    data: empData,
-                    keys: { valuekey: "id", titlekey: "name" },
-                    className: "h-8 w-full md:w-full",
-                    placeholder: "Search Filter",
-                    type: "SearchSelect",
-                    name: "search_filter",
-                    filterSearchFunction: searchData,
-                  },
-                  {
-                    options: users,
-                    name: "user_filter",
-                    value: selectedUser,
-                    onChange: setSelectedUser,
-                    placeholder: "Choose Value",
-                    keys: { valuekey: "value", titlekey: "label" },
-                    className: "h-8 w-full md:w-full",
-                    type: "SelectInput",
-                  },
-                ]}
-              />
-            </div>
-          </div>
-          {/* <SearchSelect
-            value={searchFilterVals.sf1}
-            name="sf1"
-            onSelect={(val, dataMap) => {
-              handleChange("sf1", val);
-              console.log("sf1 selected:", dataMap);
-            }}
-            data={empData}
-            keys={{ valuekey: "id", titlekey: "name" }}
-            showIcon={true}
-          />
-          <SearchSelect
-            value={searchFilterVals.sf2}
-            name="sf2"
-            onSelect={(val, dataMap) => {
-              handleChange("sf2", val);
-              console.log("sf1 selected:", dataMap);
-            }}
-            data={empData}
-            keys={{ valuekey: "id", titlekey: "name" }}
-            showIcon={true}
-          />
-          <MultiSelectCheck
-            name="TestColumns"
-            label="Test Columns"
-            options={options}
-            selected={selected}
-            onChange={setSelected}
-            keys={{ valuekey: "key", titlekey: "label" }}
-            Fname="Columns"
-            // className={"px-2 py-4"}
-          />
-          <SearchSelect
-            value={searchFilterVals.sf3}
-            name="sf3"
-            onSelect={(val, dataMap) => {
-              handleChange("sf3", val);
-              console.log("sf1 selected:", dataMap);
-            }}
-            data={empData}
-            keys={{ valuekey: "id", titlekey: "name" }}
-            showIcon={true}
-          />
-          <SelectInput
-            label="Filter by User"
-            options={users}
-            name="user_filter2"
-            value={selectedUser}
-            onChange={setSelectedUser}
-            placeholder="Choose Value"
-            keys={{ valuekey: "value", titlekey: "label" }}
-            className="h-10"
-          /> */}
-          {/* <MultiSelectInput
-          label="Select Multiple users"
-          options={users}
-          name="multi_user"
-          value={selectedUsers}
-          onChange={setSelectedUsers}
-          placeholder="Choose Value"
-          keys={{ valuekey: "value", titlekey: "label" }}
-          className="h-10"
-        /> */}
-          {/* <MultiSelectCheck
-            name="TestColumns"
-            label="Test Columns"
-            options={options}
-            selected={selected}
-            onChange={setSelected}
-            keys={{ valuekey: "key", titlekey: "label" }}
-            Fname="Columns"
-            // className={"px-2 py-4"}
-          /> */}
-        </div>
-        <SearchSelect
-          name="sf1"
-          onSelect={(val, dataMap) => {
-            handleChange("sf1", val);
-            console.log("sf1 selected:", dataMap);
-          }}
-          data={empData}
-          keys={{ valuekey: "id", titlekey: "name" }}
-          showIcon={true}
-          searchFunction={searchData}
-        />
-        <SearchSelect
-          name="sf2"
-          onSelect={(val, dataMap) => {
-            handleChange("sf2", val);
-            console.log("sf1 selected:", dataMap);
-          }}
-          data={empData}
-          keys={{ valuekey: "id", titlekey: "name" }}
-          showIcon={true}
-          searchFunction={searchData}
-        />
-        <SearchSelect
-          name="sf3"
-          onSelect={(val, dataMap) => {
-            handleChange("sf3", val);
-            console.log("sf1 selected:", dataMap);
-          }}
-          data={empData}
-          keys={{ valuekey: "id", titlekey: "name" }}
-          showIcon={true}
-          searchFunction={searchData}
-        />
-        <SelectInput
-          label="Filter by User"
-          options={users}
-          name="user_filter2"
-          value={selectedUser}
-          onChange={setSelectedUser}
-          placeholder="Choose Value"
-          keys={{ valuekey: "value", titlekey: "label" }}
-          className="h-10"
-        />
-        {/* <MultiSelectInput
-          label="Select Multiple users"
-          options={users}
-          name="multi_user"
-          value={selectedUsers}
-          onChange={setSelectedUsers}
-          placeholder="Choose Value"
-          keys={{ valuekey: "value", titlekey: "label" }}
-          className="h-10"
-        /> */}
-        {/* <MultiSelectCheck
-          name="TestColumns"
-          label="Test Columns"
-          options={options}
-          selected={selected}
-          onChange={setSelected}
-          keys={{ valuekey: "key", titlekey: "label" }}
-          Fname="Columns"
-          // className={"px-2 py-4"}
-        /> */}
+        {/* content end */}
       </div>
       {/* <div>
         <div className="px-2 py-2 ">

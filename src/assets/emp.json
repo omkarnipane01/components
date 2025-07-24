@@ -340,7 +340,13 @@
     "salary": 53000,
     "designation": "The Boggyman",
     "profile": "https://example.com/profiles/emma-garcia.png"
+  },
+  {
+    "id": 1,
+    "name": "AOmkar",
+    "salary": 100000,
+    "designation": "Ex-communicado",
+    "profile": "https://example.com/profiles/om-kar.png"
   }
   
 ]
- 

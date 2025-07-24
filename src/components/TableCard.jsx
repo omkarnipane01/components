@@ -28,14 +28,17 @@ const TableCard = ({
 
   return (
     // removed h-screen and added h-fit
-    <div className="h-fit max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh] overflow-y-auto overflow-y-auto overflow-x-auto rounded-lg shadow-sm ">
-      <table className="table-auto min-w-full text-sm text-center ">
+    <div className="w-full max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh] overflow-y-auto rounded-lg shadow-sm ">
+    {/* <div className=" w-full max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh] overflow-auto overflow-x-auto overflow-y-auto  rounded-lg shadow-sm "> */}
+<div className="w-full overflow-x-auto"></div>
+{/* toggle table-fixed and table-auto based on columns change */}
+      <table className="table-fixed w-full text-sm text-center ">
         <thead className="sticky top-0 z-50 bg-blue-100 shadow ">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.key}
-                className="border-gray-300 text-center px-6 py-3 text-sm font-medium text-gray-700 border-l border-r"
+                className="border-gray-300 text-center px-6 py-2 text-sm font-medium text-gray-700 border-l border-r"
               >
                 <div className="flex justify-center items-center gap-8 ">
                   <span>{col.label}</span>

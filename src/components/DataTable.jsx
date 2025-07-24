@@ -7,6 +7,7 @@ import Button from "./Button";
 import { ChevronLeft, ChevronRight, PanelLeft } from "lucide-react";
 import MultiSelectCheck from "./MultiSelectCheck";
 import { pages } from "../utils/utils";
+import Sheet from "./Sheet";
 
 const DataTable = ({
   columns,
@@ -61,6 +62,9 @@ const DataTable = ({
     localStorage.getItem("user_columns").split(",")
   );
 
+  const [showSheet, setSheet] = useState(false);
+
+
   const handleReset = () => {
     setSearchText(defaultSearch);
     setPage(defaultPage);
@@ -88,10 +92,13 @@ const DataTable = ({
   }, []);
 
   return (
-    <div className="px-2 py-4 grid grid-cols-5 gap-4">
+    // <div className="px-2 py-4 grid grid-cols-5 gap-4">
+    <div className="px-2 py-4 flex gap-4">
+      {/* There are two divs below */}
+      {/* div 1 */}
       <div
-        className={`${
-          filters.length > 0 && showFilter ? "col-span-4" : "col-span-5"
+        className={`w-full flex-grow ${
+          filters.length > 0 && showFilter ? "" : ""
         }`}
       >
         <div className="border border-gray-300 bg-white rounded-xl h-auto px-3 py-3 shadow-sm flex flex-col gap-4 md:flex-row md:items-center md:justify-between sm:h-12">
@@ -99,6 +106,7 @@ const DataTable = ({
             <PanelLeft
               className="cursor-pointer text-gray-500"
               onClick={() => {
+                setSheet((prev) => !prev);
                 setShowFilter((prev) => !prev);
               }}
             />
@@ -120,7 +128,6 @@ const DataTable = ({
               />
             )}
           </div>
-          {/* info div */}
 
           <div className="flex items-center gap-1">
             <SelectInput
@@ -156,7 +163,6 @@ const DataTable = ({
 
         <div className="py-2">
           <TableCard
-            // columns={columns}
             columns={columns_data.filter((col) => selected.includes(col.key))}
             data={tableData}
             rows={rows}
@@ -166,14 +172,15 @@ const DataTable = ({
             sortFunction={sortFunction}
           />
         </div>
-        <div className="sticky px-2 py-2 flex item-center justify-between border border-gray-300 bg-white shadow-sm rounded-md">
+        {/* <div className="sticky px-2 py-2 flex item-center justify-between border border-gray-300 bg-white shadow-sm rounded-md"> */}
+        <div className=" px-2 py-1 flex items-center justify-between bg-white shadow-sm rounded-md">
           <div className="px-1 py-1">showing {page} Records Per Page</div>
           <div className="px-2 gap-4 flex item-center">
             <div className="bg-gray-100 shadow-sm border-white rounded-sm px-2 py-1">
               {(currentPage - 1) * page + 1} -{" "}
               {Math.min(currentPage * page, totalCount)}
             </div>
-            <div className="flex item-center  text-blue-400  cursor-pointer ">
+            <div className="flex items-center  text-blue-400  cursor-pointer ">
               <ChevronLeft
                 size={28}
                 onClick={() => {
@@ -190,8 +197,9 @@ const DataTable = ({
           </div>
         </div>
       </div>
+      {/* div 2 */}
       {filters.length > 0 && showFilter && (
-        <div className="col-span-1 border border-gray-300 bg-white rounded-xl h-fit px-2 py-3 shadow-sm flex">
+        <div className=" border border-gray-300 bg-white rounded-xl h-fit px-2 py-3 shadow-sm flex">
           <form>
             {filters.length > 0 && (
               <div className="h-fit">
@@ -259,6 +267,7 @@ const DataTable = ({
           </form>
         </div>
       )}
+       <Sheet change={showSheet} onchange={setSheet}/>
     </div>
   );
 };
