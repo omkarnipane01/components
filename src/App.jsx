@@ -8,6 +8,7 @@ import empData from "./assets/emp.json";
 import {
   ChartNoAxesGantt,
   IndianRupee,
+  Link,
   Loader2,
   PanelLeft,
   Table2Icon,
@@ -21,6 +22,7 @@ import MultiSelectInput from "./components/MultiSelectInput";
 import MultiSelectCheck from "./components/MultiSelectCheck";
 import Sheet from "./components/Sheet";
 
+
 function App() {
   const [count, setCount] = useState(0);
   // !while pass key to columns pass database column field name here
@@ -32,7 +34,7 @@ function App() {
     { key: "profile", label: "Profile" },
   ];
   // extract columns and data row from the data and pass to the component it would me more better and dynamic to edit the row data
-
+  //  const columns = ['Id','Name','Salary','Designation','Profile','Action']
   const editData = (data) => {
     console.log("edit-data");
     console.log(data);
@@ -93,6 +95,7 @@ function App() {
     { value: "2", label: "User 2" },
     { value: "3", label: "User 3" },
     { value: "4", label: "User 4" },
+    { value: "5", label: "Ex-communicado" },
   ];
 
   const [searchFilterVals, setSearchFilterVals] = useState({
@@ -104,7 +107,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(true);
   console.log("showSidebar ", showSidebar);
 
-  // const [showSheet, setSheet] = useState(false);
+  
 
   const handleChange = (name, val) => {
     setSearchFilterVals((prev) => ({
@@ -133,9 +136,9 @@ function App() {
       <div className="flex gap-2 h-screen w-full">
         {/* sidebar start */}
         <div
-          className={`fixed h-screen  ${
+          className={`fixed z-40 h-screen  ${
             showSidebar ? "w-[250px]" : "w-[50px] "
-          }  z-100 bg-white border-red-500 border rounded-md px-2 py-2 shadow-md flex gap-3`}
+          }   bg-white border-red-500 border rounded-md px-2 py-2 shadow-md flex gap-3`}
         >
           <div className="flex flex-1 justify-between justify">
             <div>{showSidebar && "sidebar"}</div>
@@ -152,9 +155,11 @@ function App() {
         </div>
         {/* sidebar ends */}
         {/* content start */}
-        
+
         <div
-          className={`${showSidebar?'ml-[250px]':'ml-[50px]'} bg-white border-red-500 border rounded-lg px-2 py-2 shadow`}
+          className={` overflow-y-auto ${
+            showSidebar ? "ml-[250px]" : "ml-[50px]"
+          } bg-white border-red-500 border rounded-lg px-2 py-2 shadow`}
         >
           <div className="px-1 py-2 ">
             <DataTable
@@ -162,6 +167,27 @@ function App() {
               data={data}
               users={users}
               keys={{ valuekey: "value", titlekey: "label" }}
+              // rows={[{
+              //   id: (row) => row.id,
+              //   name: (row) => row.name,
+              //   salary: (row) => (
+              //     <span className="flex items-center gap-1">
+              //       <IndianRupee size={14} />
+              //       {row.salary}
+              //     </span>
+              //   ),
+              //   designation: (row) => row.designation,
+              //   profile: (row) => (
+              //     <a
+              //       href={row.profile}
+              //       className="break-words"
+              //       target="_blank"
+              //       rel=""
+              //     >
+              //       {row.profile}
+              //     </a>
+              //   ),
+              // }]}
               rows={{
                 id: (row) => row.id,
                 name: (row) => row.name,
@@ -173,14 +199,15 @@ function App() {
                 ),
                 designation: (row) => row.designation,
                 profile: (row) => (
-                  <a
-                    href={row.profile}
-                    className="break-words"
-                    target="_blank"
-                    rel=""
-                  >
+                  // <div className="flex items-center">
+                  <a href={row.profile} className=" " target="_blank" rel="">
+                    {/* <Link
+                        size={20}
+                        className="text-blue-400 cursor-pointer"
+                      /> */}
                     {row.profile}
                   </a>
+                  // </div>
                 ),
               }}
               action={{
@@ -206,9 +233,29 @@ function App() {
                   name: "search_filter",
                   filterSearchFunction: searchData,
                 },
+
+                {
+                  data: empData,
+                  keys: { valuekey: "id", titlekey: "name" },
+                  className: "h-8 w-full md:w-full",
+                  placeholder: "Search Filter",
+                  type: "SearchSelect",
+                  name: "search_filter2",
+                  filterSearchFunction: searchData,
+                },
                 {
                   options: users,
                   name: "user_filter",
+                  value: selectedUser,
+                  onChange: setSelectedUser,
+                  placeholder: "Choose Value",
+                  keys: { valuekey: "value", titlekey: "label" },
+                  className: "h-8 w-full md:w-full",
+                  type: "SelectInput",
+                },
+                {
+                  options: users,
+                  name: "user_filter2",
                   value: selectedUser,
                   onChange: setSelectedUser,
                   placeholder: "Choose Value",

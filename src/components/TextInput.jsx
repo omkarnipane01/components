@@ -11,7 +11,7 @@ const TextInput = ({
   ...rest
 }) => {
   return (
-    <div className={`w-full px-4 ${className}`}>
+    <div className={`w-full  ${className}`}>
       {label && (
         <label
           htmlFor={name}
@@ -29,7 +29,6 @@ const TextInput = ({
         {...rest}
         required={required}
         className={`w-full ${className} px-4 py-2 border rounded border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
-            
             ${
               required
                 ? "border-l-4 border-l-red-500"
