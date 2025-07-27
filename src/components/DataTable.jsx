@@ -69,6 +69,7 @@ const DataTable = ({
     columns_data = [...columns, { key: "action", label: "Action" }];
   }
   const showActions = action?.edit || action?.delete || action?.view;
+  localStorage.setItem("user_columns", columns_data.map((item) => item.key));
   const [selected, setSelected] = useState(
     localStorage.getItem("user_columns").split(",")
   );
