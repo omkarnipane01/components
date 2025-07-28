@@ -345,9 +345,6 @@ const DataTable = ({
             <form>
               {filters.length > 0 && (
                 <div className="h-fit">
-                  {/* <span className="text-gray-500">
-                  <b>Apply Filters</b>
-                </span> */}
                   <div className="grid grid-cols-2">
                     {filters.map((filter, index) => {
                       if (filter.type == "SearchSelect") {
