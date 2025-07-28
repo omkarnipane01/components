@@ -69,7 +69,15 @@ const DataTable = ({
     columns_data = [...columns, { key: "action", label: "Action" }];
   }
   const showActions = action?.edit || action?.delete || action?.view;
-  localStorage.setItem("user_columns", columns_data.map((item) => item.key));
+
+  const existing = localStorage.getItem("user_columns");
+
+  if (!existing ) {
+    localStorage.setItem(
+      "user_columns",
+      JSON.stringify(columns_data.map((item) => item.key))
+    );
+  }
   const [selected, setSelected] = useState(
     localStorage.getItem("user_columns").split(",")
   );
@@ -171,7 +179,7 @@ const DataTable = ({
               keys={{ valuekey: "key", titlekey: "label" }}
               className="h-8 w-auto md:w-18"
             />
-          
+
             <MultiSelectCheck
               name="columns"
               options={columns_data}
@@ -207,14 +215,16 @@ const DataTable = ({
           ) : (
             <div className="flex flex-row w-fit">
               {/* Mobile view */}
-              <MobileCard 
-              columns={columns_data.filter((col) => selected.includes(col.key))}
-              data={tableData}
-              rows={rows}
-              action={action}
-              showVertical={showVertical}
-              sort={sort}
-              sortFunction={sortFunction}
+              <MobileCard
+                columns={columns_data.filter((col) =>
+                  selected.includes(col.key)
+                )}
+                data={tableData}
+                rows={rows}
+                action={action}
+                showVertical={showVertical}
+                sort={sort}
+                sortFunction={sortFunction}
               />
             </div>
           )}

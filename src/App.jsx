@@ -21,7 +21,7 @@ import Button from "./components/Button";
 import MultiSelectInput from "./components/MultiSelectInput";
 import MultiSelectCheck from "./components/MultiSelectCheck";
 import Sheet from "./components/Sheet";
-
+import { isMobile } from "./utils/utils";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -64,6 +64,7 @@ function App() {
     });
     setData(sorted);
   };
+
   const filterTable = (filters = []) => {
     console.log("filters ", filters);
     console.log("Apply filter");
@@ -104,10 +105,7 @@ function App() {
     sf3: "",
   });
 
-  const [showSidebar, setShowSidebar] = useState(true);
-  console.log("showSidebar ", showSidebar);
-
-  
+  const [showSidebar, setShowSidebar] = useState(!isMobile());
 
   const handleChange = (name, val) => {
     setSearchFilterVals((prev) => ({
@@ -135,32 +133,42 @@ function App() {
     <>
       <div className="flex gap-2 h-screen w-full">
         {/* sidebar start */}
-        <div
-          className={`fixed z-40 h-screen  ${
-            showSidebar ? "w-[250px]" : "w-[50px] "
-          }   bg-white border-red-500 border rounded-md px-2 py-2 shadow-md flex gap-3`}
-        >
-          <div className="flex flex-1 justify-between justify">
-            <div>{showSidebar && "sidebar"}</div>
-            <div className="justify justify-left">
-              <PanelLeft
-                className="cursor-pointer text-gray-500"
-                onClick={() => {
-                  setShowSidebar((prev) => !prev);
-                }}
-              />
-            </div>
-            {/* <Sheet change={showSheet} onchange={setSheet}/> */}
+        {(!isMobile() || showSidebar) && (
+          <div
+            className={`fixed z-20 h-screen bg-white border-red-500 border rounded-md px-2 py-2 shadow-md flex gap-3
+      ${showSidebar ? "w-[250px]" : isMobile() ? "hidden" : "w-[50px]"}
+    `}
+          >
+            <div>{showSidebar && "Sidebar"}</div>
           </div>
-        </div>
+        )}
+        {/* Overlay for mobile view */}
+        {isMobile() && showSidebar && (
+          <div
+            className="fixed inset-0 z-10 bg-black/30"
+            onClick={() => setShowSidebar(false)}
+          />
+        )}
         {/* sidebar ends */}
         {/* content start */}
-
         <div
-          className={` overflow-y-auto ${
-            showSidebar ? "ml-[250px]" : "ml-[50px]"
+          className={` overflow-y-auto  ${
+            isMobile() ? "ml-0" : showSidebar ? "ml-[250px]" : "ml-[50px]"
           } bg-white border-red-500 border rounded-lg px-2 py-2 shadow`}
         >
+          <div className="bg-white border-red-500 border rounded-lg px-2 py-1 shadow">
+            <div className="flex flex-1 justify-between justify">
+              {/* <div>{showSidebar && "sidebar"}</div> */}
+              <div className="justify justify-left">
+                <PanelLeft
+                  className="cursor-pointer text-gray-500"
+                  onClick={() => {
+                    setShowSidebar((prev) => !prev);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
           <div className="px-1 py-2 ">
             <DataTable
               columns={columns}
