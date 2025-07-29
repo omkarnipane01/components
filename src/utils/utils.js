@@ -13,3 +13,9 @@ export const isMobile = () => {
     return false;
   }
 };
+
+// for sending email using node js code , first allow a two factor authentication.
+// 1. Then create a app password, for you application.
+// 2. Update the while passing pass use this key witout spaces. 
+// 3. Check on your server whether email port is blocked or not. 
+// 4. 

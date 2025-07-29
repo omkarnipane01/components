@@ -4,49 +4,65 @@
     "name": "John",
     "salary": 55000,
     "designation": "Software Engineer",
-    "profile": "https://example.com/profiles/john-doe.png"
+    "profile": "https://example.com/profiles/john-doe.png",
+    "location":"Navi Mumbai",
+    "status": "Active"
+
   },
   {
     "id": 2,
     "name": "Jane",
     "salary": 62000,
     "designation": "Project Manager",
-    "profile": "https://example.com/profiles/jane-smith.png"
+    "profile": "https://example.com/profiles/jane-smith.png",
+    "location":"Mumbai",
+    "status": "Active"
   },
   {
     "id": 3,
     "name": "Michael",
     "salary": 58000,
     "designation": "UI/UX Designer",
-    "profile": "https://example.com/profiles/michael-lee.png"
+    "profile": "https://example.com/profiles/michael-lee.png",
+    "location":"Delhi",
+    "status": "Active"
+
   },
   {
     "id": 4,
     "name": "Emily",
     "salary": 49000,
     "designation": "QA Tester",
-    "profile": "https://example.com/profiles/emily-davis.png"
+    "profile": "https://example.com/profiles/emily-davis.png",
+    "location":"NYC",
+    "status": "Active"
   },
   {
     "id": 5,
     "name": "David",
     "salary": 65000,
     "designation": "DevOps Engineer",
-    "profile": "https://example.com/profiles/david-brown.png"
+    "profile": "https://example.com/profiles/david-brown.png",
+    "location":"Delhi",
+    "status": "Active"
   },
   {
     "id": 6,
     "name": "Sophia",
     "salary": 57000,
     "designation": "Business Analyst",
-    "profile": "https://example.com/profiles/sophia-taylor.png"
+    "profile": "https://example.com/profiles/sophia-taylor.png",
+    "location":"Delhi",
+    "status": "Active"
   },
   {
     "id": 7,
     "name": "Daniel",
     "salary": 62000,
     "designation": "Full Stack Developer",
-    "profile": "https://example.com/profiles/daniel-wilson.png"
+    "profile": "https://example.com/profiles/daniel-wilson.png",
+    "location":"Delhi",
+    "status": "Active"
   },
 
   {
@@ -54,21 +70,27 @@
     "name": "Olivia",
     "salary": 45000,
     "designation": "Technical Support",
-    "profile": "https://example.com/profiles/olivia-johnson.png"
+    "profile": "https://example.com/profiles/olivia-johnson.png",
+    "location":"Delhi",
+    "status": "Active"
   },
   {
     "id": 9,
     "name": "James",
     "salary": 60000,
     "designation": "Database Administrator",
-    "profile": "https://example.com/profiles/james-martin.png"
+    "profile": "https://example.com/profiles/james-martin.png",
+    "location":"Delhi",
+    "status": "Active"
   },
   {
     "id": 10,
     "name": "Emma",
     "salary": 53000,
     "designation": "Content Writer",
-    "profile": "https://example.com/profiles/emma-garcia.png"
+    "profile": "https://example.com/profiles/emma-garcia.png",
+    "location":"Delhi",
+    "status": "Active"
   }
   ,
    {
@@ -76,42 +98,50 @@
     "name": "Ram",
     "salary": 72000,
     "designation": "Sr.Full Stack Developer",
-    "profile": "https://example.com/profiles/daniel-wilson.png"
+    "profile": "https://example.com/profiles/daniel-wilson.png",
+    "location":"Delhi",
+    "status": "Active"
   },
    {
     "id": 12,
     "name": "Wick",
     "salary": 53000,
     "designation": "The Boggyman",
-    "profile": "https://example.com/profiles/emma-garcia.png"
+    "profile": "https://example.com/profiles/emma-garcia.png",
+    "location":"Delhi",
+    "status": "Active"
   },
    {
     "id": 13,
     "name": "Emma",
     "salary": 49000,
     "designation": "QA Tester",
-    "profile": "https://example.com/profiles/emily-davis.png"
+    "profile": "https://example.com/profiles/emily-davis.png",
+    "status": "Active"
   },
    {
     "id": 14,
     "name": "Emily",
     "salary": 49000,
     "designation": "QA Tester",
-    "profile": "https://example.com/profiles/emily-davis.png"
+    "profile": "https://example.com/profiles/emily-davis.png",
+    "status": "Active"
   },
   {
     "id": 15,
     "name": "David",
     "salary": 65000,
     "designation": "DevOps Engineer",
-    "profile": "https://example.com/profiles/david-brown.png"
+    "profile": "https://example.com/profiles/david-brown.png",
+    "status": "Active"
   },
   {
     "id": 16,
     "name": "Sophia",
     "salary": 57000,
     "designation": "Business Analyst",
-    "profile": "https://example.com/profiles/sophia-taylor.png"
+    "profile": "https://example.com/profiles/sophia-taylor.png",
+    "status": "Active"
   },
   {
     "id": 17,

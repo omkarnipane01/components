@@ -32,6 +32,9 @@ function App() {
     { key: "salary", label: "Salary" },
     { key: "designation", label: "Designation" },
     { key: "profile", label: "Profile" },
+    { key: "location", label: "Location" },
+    { key: "status", label: "Status" },
+
   ];
   // extract columns and data row from the data and pass to the component it would me more better and dynamic to edit the row data
   //  const columns = ['Id','Name','Salary','Designation','Profile','Action']
@@ -199,6 +202,8 @@ function App() {
               rows={{
                 id: (row) => row.id,
                 name: (row) => row.name,
+                location: (row) => row.location,
+                status: (row) => row.status,
                 salary: (row) => (
                   <span className="flex items-center gap-1">
                     <IndianRupee size={14} />
