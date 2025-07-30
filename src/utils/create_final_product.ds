@@ -1,0 +1,16 @@
+void automation.Create_Final_Product(Int id)
+{
+bomRec = zoho.crm.getRecordById("BOM",id.toString());
+dataMap = Map();
+if(bomRec.get('Status') == 'Completed')
+{
+	dataMap.put("Unit_Price",bomRec.get('Price'));
+	dataMap.put("Product_Name",bomRec.get('Product_Name'));
+	create_record = zoho.crm.createRecord("Products",dataMap);
+	info create_record;
+}
+else
+{
+	info "Cannot create product with status: " + bomRec.getJson("Status");
+}
+}

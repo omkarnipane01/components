@@ -1,0 +1,23 @@
+void automation.update_qty(Int id)
+{
+bomRec = zoho.crm.getRecordById("BOM",id.toString());
+BOM_For_Product = bomRec.getJson("BOM_For_Product");
+for each  product in BOM_For_Product
+{
+	update_map = Map();
+	bom_qty = product.getJson("Qty");
+	product_id = product.getJson("Raw_Product").getJson("id");
+	// get product buy id and update it
+	raw_product = zoho.crm.getRecordById("Raw_Material",product_id);
+	existing_qty = raw_product.getJson("UOM_Quantity");
+	if(toNumber(existing_qty) >= bom_qty)
+	{
+		final_qty = toNumber(existing_qty) - toNumber(bom_qty);
+		info "final_qty " + final_qty;
+		// update the record
+		update_map.put("UOM_Quantity",final_qty);
+		update_stock = zoho.crm.updateRecord("Raw_Material",product_id,update_map);
+		info update_stock;
+	}
+}
+}
