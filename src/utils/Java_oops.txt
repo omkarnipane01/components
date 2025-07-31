@@ -1,0 +1,7 @@
+# Java oops concepts.
+1. Generat a project structure using a tool spring initilizer.
+2. It will give us a zip which we can extract into our project folder.
+3. We can also create project manually. using below commands.
+-
+4. After generating project, you will be have src foler and pom.xml file. 
+5. Src folder , This is the main source folder where all your application code and resources live.It has two subfolders:
