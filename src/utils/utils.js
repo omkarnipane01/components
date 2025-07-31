@@ -19,3 +19,11 @@ export const isMobile = () => {
 // 2. Update the while passing pass use this key witout spaces. 
 // 3. Check on your server whether email port is blocked or not. 
 // 4. 
+
+// Pending Component list
+// 1. CheckBox
+// 2. Togglebutton
+// 3. Date
+// 4. DateRange
+// 5. MultiSelect,
+// 6. MultiSearchSelect
