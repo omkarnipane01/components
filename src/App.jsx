@@ -231,7 +231,7 @@ function App() {
               }}
               is_search={true}
               searchData={searchData}
-              showVertical={true}
+              // showVertical={true}
               totalRecords={empData.length}
               sort={true}
               sortFunction={sortData}

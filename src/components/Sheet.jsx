@@ -8,16 +8,36 @@ const Sheet = ({
   title = "",
   position = "right",
 }) => {
-  const isLeft = position === "left";
-  const baseClasses = `fixed top-0 ${
-    isLeft ? "left-0" : "right-0"
-  } w-[350px] h-screen bg-white shadow-xl border-l border-gray-200 flex flex-col z-50 transform transition-transform duration-300 ease-in-out`;
+  // const isLeft = position === "left";
+  // const baseClasses = `fixed top-0 ${
+  //   isLeft ? "left-0" : "right-0"
+  // } w-[350px] h-screen bg-white shadow-xl border-l border-gray-200 flex flex-col z-50 transform transition-transform duration-300 ease-in-out`;
 
-  const slideClass = change
-    ? "translate-x-0"
-    : isLeft
-    ? "-translate-x-full"
-    : "translate-x-full";
+  // const slideClass = change
+  //   ? "translate-x-0"
+  //   : isLeft
+  //   ? "-translate-x-full"
+  //   : "translate-x-full";
+    // 
+    const isBottom = position === "bottom";
+const isLeft = position === "left";
+
+// Base positioning styles
+const baseClasses = `fixed ${
+  isBottom
+    ? "bottom-0 left-0 w-full h-[300px]"
+    : `${isLeft ? "left-0" : "right-0"} top-0 w-[350px] h-screen`
+} bg-white shadow-xl border border-gray-200 flex flex-col z-50 transform transition-transform duration-300 ease-in-out`;
+
+// Slide animation styles
+const slideClass = change
+  ? "translate-x-0 translate-y-0"
+  : isBottom
+  ? "translate-y-full"
+  : isLeft
+  ? "-translate-x-full"
+  : "translate-x-full";
+
   return (
     <>
       {change && (

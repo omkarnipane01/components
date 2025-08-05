@@ -337,7 +337,7 @@ const DataTable = ({
       <Sheet
         change={showSheet}
         onchange={setSheet}
-        position="left"
+        position={isMobileScreen? "bottom":"right"}
         title="Apply Filters"
       >
         {filters.length > 0 && (

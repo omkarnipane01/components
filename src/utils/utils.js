@@ -14,6 +14,9 @@ export const isMobile = () => {
   }
 };
 
+// create a currencyfy function which will display amont as 1k, 10k , 500k like this.
+
+
 // for sending email using node js code , first allow a two factor authentication.
 // 1. Then create a app password, for you application.
 // 2. Update the while passing pass use this key witout spaces. 
